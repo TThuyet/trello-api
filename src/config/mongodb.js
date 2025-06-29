@@ -4,16 +4,14 @@
  * "A bit of fragrance clings to the hand that gives flowers!"
  */
 
-const MONGODB_URI =
-  "mongodb+srv://thuyetct:YEkC2zUms9bjBC22@cluster0-tthuyet.lprea.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0-TThuyet";
 
-const DATABASE_NAME = "trello-api";
 
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { env } from "~/config/environment.js";
 
 let trelloDbInstance = null;
 
-const mongoClientInstance = new MongoClient(MONGODB_URI, {
+const mongoClientInstance = new MongoClient(env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -25,7 +23,7 @@ const mongoClientInstance = new MongoClient(MONGODB_URI, {
 export const CONNECT_DB = async () => {
   await mongoClientInstance.connect();
 
-  trelloDbInstance = mongoClientInstance.db(DATABASE_NAME);
+  trelloDbInstance = mongoClientInstance.db(env.DATABASE_NAME);
 };
 
 export const GET_DB = () => {

@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Joi from "joi";
+import ApiError from "~/utils/ApiError";
 
 const createNew = async (req, res, next) => {
   // validate by joi
@@ -13,16 +14,16 @@ const createNew = async (req, res, next) => {
     // abortEarly: false sẽ cho phép Joi trả về tất cả các lỗi thay vì dừng lại khi gặp lỗi đầu tiên
     // validateAsync sẽ trả về một Promise, nếu dữ liệu hợp lệ thì Promise sẽ được giải quyết,
     await correctCondition.validateAsync(req.body, { abortEarly: false });
-    res.status(StatusCodes.CREATED).json({
-      message: "POST : Board API is running",
-      code: StatusCodes.CREATED,
-    });
+    // khi validate thành công, tiếp tục xử lý request -> controller
+    next();
   } catch (error) {
-    console.log(error);
-
-    res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-      error: new Error(error).message,
-    });
+    // console.log(error);
+    // res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    //   error: new Error(error).message,
+    // });
+    next(
+      new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(error).message)
+    );
   }
 };
 
