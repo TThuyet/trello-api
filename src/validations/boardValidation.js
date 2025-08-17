@@ -27,6 +27,15 @@ const createNew = async (req, res, next) => {
   }
 };
 
+// const findOneByIdBoard = async (req, res, next) => {
+//   const correctCondition = Joi.object({
+//     id: Joi.string()
+//       .required()
+//       .pattern(/^[0-9a-fA-F]{24}$/)
+//       .message("Invalid board ID format"),
+//   });
+// }
+
 export const boardValidation = {
   createNew,
 };

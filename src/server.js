@@ -1,13 +1,18 @@
 // eslint-disable-next-line no-console
 import express from "express";
+import cors from "cors";
 import { mapOrder } from "~/utils/sorts.js";
 import { CONNECT_DB, GET_DB } from "~/config/mongodb";
 import { APIs_V1 } from "./routes/v1";
 import { errorHandlingMiddleware } from "./middlewares/errorsHandlingMiddleware";
 import { env } from "./config/environment";
+import { corsOptions } from "./config/cors";
 
 const START_SERVER = () => {
   const app = express();
+
+  // xử lý cors
+  app.use(cors(corsOptions));
   // const hostname = "localhost";
   // const port = 8017;
 

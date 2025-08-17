@@ -1,18 +1,43 @@
+/* eslint-disable no-useless-catch */
+import { StatusCodes } from "http-status-codes";
+import { ObjectId } from "mongodb";
+import { boardModel } from "~/models/boardModel";
+import ApiError from "~/utils/ApiError";
 import { slugify } from "~/utils/formatters";
 
-const createNew = async (reqBody) => {
-  //   try {
-  const newBoard = {
-    ...reqBody,
-    slug: slugify(reqBody.title),
-  };
+const createNewBoardService = async (reqBody) => {
 
-  return newBoard;
-  //   } catch (error) {
-  //     throw error;
-  //   }
+  try {
+    const newBoard = {
+      ...reqBody,
+      slug: slugify(reqBody.title),
+    };
+
+    const createBoardService = await boardModel.createNewBoardModel(newBoard);
+
+    const findBoardService = await boardModel.findOneById(
+      createBoardService.insertedId
+    );
+    return findBoardService;
+  } catch (error) {
+    throw error;
+  }
 };
 
+const getDetailBoardService = async (reqParams) => {
+  try {
+    const { id:boardId } = reqParams;
+    const board = await boardModel.findOneById(boardId);
+    if(!board) {
+      throw new ApiError(StatusCodes.NOT_FOUND,`Board with ID ${boardId} not found`);
+    }
+    return board;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const boardService = {
-  createNew,
+  createNewBoardService,
+  getDetailBoardService,
 };

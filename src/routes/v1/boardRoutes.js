@@ -11,6 +11,10 @@ Router.route("/")
       code: StatusCodes.OK,
     });
   })
-  .post(boardValidation.createNew, boardController.createNewBoard);
+  .post(boardValidation.createNew, boardController.createNewBoardController);
+  
+Router.route("/:id")
+  .get(boardController.getDetailBoardController)
+  .put()
 
 export const boardRoutes = Router;
