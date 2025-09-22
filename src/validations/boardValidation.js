@@ -1,12 +1,22 @@
 import { StatusCodes } from "http-status-codes";
 import Joi from "joi";
 import ApiError from "~/utils/ApiError";
+import { BOARD_TYPES } from "~/utils/constants";
 
 const createNew = async (req, res, next) => {
   // validate by joi
   const correctCondition = Joi.object({
-    title: Joi.string().min(3).max(255).required().trim().strict(),
+    title: Joi.string().min(3).max(255).required().trim().strict().messages({
+      "any.required": "Title is required ",
+      "string.empty": "Title cannot be empty ",
+      "string.min": "Title must be at least 3 characters long ",
+      "string.max": "Title must not exceed 5 characters ",
+      "string.trim": "Title must not contain leading or trailing spaces ",
+    }),
     description: Joi.string().min(3).max(255).required().trim().strict(),
+    type: Joi.string()
+      .valid(...Object.values(BOARD_TYPES))
+      .required(),
   });
 
   try {

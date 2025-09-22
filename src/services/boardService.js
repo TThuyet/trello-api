@@ -6,7 +6,6 @@ import ApiError from "~/utils/ApiError";
 import { slugify } from "~/utils/formatters";
 
 const createNewBoardService = async (reqBody) => {
-
   try {
     const newBoard = {
       ...reqBody,
@@ -26,16 +25,19 @@ const createNewBoardService = async (reqBody) => {
 
 const getDetailBoardService = async (reqParams) => {
   try {
-    const { id:boardId } = reqParams;
-    const board = await boardModel.findOneById(boardId);
-    if(!board) {
-      throw new ApiError(StatusCodes.NOT_FOUND,`Board with ID ${boardId} not found`);
+    const { id: boardId } = reqParams;
+    const board = await boardModel.getDetails(boardId);
+    if (!board) {
+      throw new ApiError(
+        StatusCodes.NOT_FOUND,
+        `Board with ID ${boardId} not found`
+      );
     }
     return board;
   } catch (error) {
     throw error;
   }
-}
+};
 
 export const boardService = {
   createNewBoardService,
